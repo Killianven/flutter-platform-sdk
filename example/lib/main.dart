@@ -1,8 +1,12 @@
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:golain/golain.dart';
+import 'package:golain_example/scanbloc/scan_bloc.dart';
+import 'package:golain_example/scanning.dart';
 
 void main() {
   runApp(const MyApp());
@@ -54,10 +58,15 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+        body:MultiBlocProvider(
+          providers: [
+            BlocProvider<ScanBloc>(
+              create: (context) => ScanBloc(),
+            ),
+          ],
+          child: const Scanning(),
         ),
-      ),
-    );
+        ),
+      );
   }
 }
