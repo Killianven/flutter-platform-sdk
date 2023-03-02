@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:nordic_nrf_mesh/nordic_nrf_mesh.dart';
@@ -16,12 +17,13 @@ class Golain {
   late final StreamSubscription<IMeshNetwork?> onNetworkUpdateSubscription;
   late final StreamSubscription<IMeshNetwork?> onNetworkImportSubscription;
   late final StreamSubscription<IMeshNetwork?> onNetworkLoadingSubscription;
+  bool isScanning = false;
+  bool isProvisioning = false;
+  final _serviceData = <String, Uuid>{};
 
   StreamSubscription? _scanSubscription;
-  // final _serviceData = <String, Uuid>{};
-  // final List<DiscoveredDevice> _devices = [];
 
-  /// Initializes the streams required for the plugin and returns an instance of [Golain].
+  //Initializes the streams required for the plugin and returns an instance of [Golain].
   Golain() {
     _meshManagerApi = _nordicNrfMesh.meshManagerApi;
     _meshNetwork = _meshManagerApi.meshNetwork;
@@ -37,7 +39,8 @@ class Golain {
         _meshManagerApi.onNetworkLoaded.listen((network) {
       _meshNetwork = network;
     });
-    _meshManagerApi.loadMeshNetwork();
+
+    loadMeshNetwork();
   }
 
   void dispose() {
@@ -47,34 +50,41 @@ class Golain {
     _scanSubscription?.cancel();
   }
 
+  Future<void> loadMeshNetwork() async {
+    await _meshManagerApi.loadMeshNetwork();
+  }
+
   /// Scans for unprovisioned devices.
   ///
   /// Returns a list of [DiscoveredDevice]s. Await this method to get the list.
   /// The list is empty if no devices are found.
   /// Throws [PermissionDeniedException] if the bluetooth permission is not granted.
   /// Throws [BluetoothNotEnabledException] if the bluetooth is not enabled.
-  Future<List<DiscoveredDevice>> scanUnprovisionedDevices() async {
-    // TODO: implement scanUnprovisionedDevices
-     Set<DiscoveredDevice> _devices = <DiscoveredDevice>{};
-     List<DiscoveredDevice> devices = [];
-    
-     
+  Future<List<DiscoveredDevice>> scanUnprovisionedDevices(
+      {required Duration duration}) async {
+    Set<DiscoveredDevice> devices0 = <DiscoveredDevice>{};
+    List<DiscoveredDevice> devices = [];
+    _serviceData.clear();
     _scanSubscription?.cancel();
     devices.clear();
     // ignore: await_only_futures
-    _scanSubscription = await _nordicNrfMesh.scanForUnprovisionedNodes().listen (
+    _scanSubscription = await _nordicNrfMesh.scanForUnprovisionedNodes().listen(
       (device) async {
-         if(_devices.every((element) => element.id != device.id)) {
-          _devices.add(device);
-          // devices.add(device);
-           devices=_devices.toList();
-         }
+        isScanning = true;
+        if (devices0.every((element) => element.id != device.id)) {
+          final deviceUUid = Uuid.parse(_meshManagerApi.getDeviceUuid(
+              device.serviceData[meshProvisioningUuid]!.toList()));
+          _serviceData[device.id] = deviceUUid;
+          devices0.add(device);
+          devices = devices0.toList();
+        }
       },
     );
-  
+
     return Future.delayed(
-      const Duration(seconds: 5),
+      Duration(seconds: duration.inSeconds),
       () {
+        isScanning = false;
         _scanSubscription?.cancel();
         return devices;
       },
@@ -85,10 +95,8 @@ class Golain {
   ///
   /// Call this method with a timeout to the [scanUnprovisionedDevices] method.
   /// Otherwise, the scanning will continue forever consuming battery of the mobile.
-  Future<void> stopScanning() {
-    // TODO: implement scanUnprovisionedDevices
-
-   
+  Future<void> stopScanning() async {
+    await _scanSubscription?.cancel();
     throw UnimplementedError();
   }
 
@@ -96,8 +104,53 @@ class Golain {
   ///
   /// Await this method to provision the devices.
   /// Pass the list of [DiscoveredDevice]s that you want to provision.
-  Future<void> provisionDevice(List<DiscoveredDevice> devices) {
-    // TODO: implement provisionDevice
-    throw UnimplementedError();
+  ///
+  ///
+  ///
+  ///
+
+  Future<void> provisionDevice(DiscoveredDevice device) async {
+    if (_meshNetwork == null) {
+      return Future.error("Mesh Network not loaded");
+    }
+
+    if (isScanning) {
+      await stopScanning();
+    }
+    if (isProvisioning) {
+      throw Exception("Already Provisioning");
+    }
+
+    //not provisioning yet
+
+    isProvisioning = true;
+
+    try {
+      String deviceUUID;
+
+      if (Platform.isAndroid) {
+        deviceUUID = _serviceData[device.id].toString();
+      } else if (Platform.isIOS) {
+        deviceUUID = device.id.toString();
+      } else {
+        throw UnimplementedError("Platform not supported");
+      }
+
+      final provisingEvent = ProvisioningEvent();
+      final provisionedMeshNode = _nordicNrfMesh
+          .provisioning(_meshManagerApi, BleMeshManager(), device, deviceUUID,
+              events: provisingEvent)
+          .timeout(const Duration(minutes: 1));
+
+      await provisionedMeshNode.then((value) {
+        isProvisioning = false;
+      }).catchError((e) {
+        print(e);
+        isProvisioning = false;
+      });
+    } catch (e) {
+      print(e);
+      scanUnprovisionedDevices(duration: const Duration(seconds: 10));
+    }
   }
 }

@@ -2,8 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:golain/golain.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:golain/golain.dart';
+import 'package:golain_example/utils/constants.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 part 'scan_event.dart';
@@ -24,8 +25,18 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
 
     on<ScanRequested>((event, emit) async {
       try {
-        final scannedDevices = await _golain.scanUnprovisionedDevices();
+        final scannedDevices =
+            await _golain.scanUnprovisionedDevices(duration: kconstDuration);
         emit(ScanningSuccess(scannedDevices));
+      } catch (e) {
+        emit(ScanningFailure(e.toString()));
+      }
+    });
+
+    on<Provision>((event, emit) async {
+      try {
+        await _golain.provisionDevice(event.device);
+        emit(Provisioned());
       } catch (e) {
         emit(ScanningFailure(e.toString()));
       }

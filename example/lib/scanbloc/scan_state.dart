@@ -31,3 +31,5 @@ class ScanningFailure extends ScanState {
   @override
   List<Object> get props => [message];
 }
+
+class Provisioned extends ScanState {}
