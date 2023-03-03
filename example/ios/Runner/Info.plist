@@ -47,5 +47,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Le bluetooth est utilisé pour configurer vos accessoires</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>We need BT access because it's a BT App.</string>
 </dict>
 </plist>
