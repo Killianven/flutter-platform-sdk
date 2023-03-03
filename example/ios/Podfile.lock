@@ -1,0 +1,67 @@
+PODS:
+  - CryptoSwift (1.5.1)
+  - device_info_plus (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+  - golain (0.0.1):
+    - Flutter
+  - nordic_nrf_mesh (0.13.0):
+    - Flutter
+    - nRFMeshProvision
+  - nRFMeshProvision (3.2.0):
+    - CryptoSwift (= 1.5.1)
+  - permission_handler_apple (9.0.4):
+    - Flutter
+  - Protobuf (3.21.12)
+  - reactive_ble_mobile (0.0.1):
+    - Flutter
+    - Protobuf (~> 3.5)
+    - SwiftProtobuf (~> 1.0)
+  - SwiftProtobuf (1.20.3)
+
+DEPENDENCIES:
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
+  - Flutter (from `Flutter`)
+  - golain (from `.symlinks/plugins/golain/ios`)
+  - nordic_nrf_mesh (from `.symlinks/plugins/nordic_nrf_mesh/ios`)
+  - nRFMeshProvision (from `.symlinks/plugins/nordic_nrf_mesh/IOS-nRF-Mesh-Library`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - reactive_ble_mobile (from `.symlinks/plugins/reactive_ble_mobile/ios`)
+
+SPEC REPOS:
+  trunk:
+    - CryptoSwift
+    - Protobuf
+    - SwiftProtobuf
+
+EXTERNAL SOURCES:
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
+  Flutter:
+    :path: Flutter
+  golain:
+    :path: ".symlinks/plugins/golain/ios"
+  nordic_nrf_mesh:
+    :path: ".symlinks/plugins/nordic_nrf_mesh/ios"
+  nRFMeshProvision:
+    :path: ".symlinks/plugins/nordic_nrf_mesh/IOS-nRF-Mesh-Library"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
+  reactive_ble_mobile:
+    :path: ".symlinks/plugins/reactive_ble_mobile/ios"
+
+SPEC CHECKSUMS:
+  CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
+  device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  golain: 1cdacc907ad7dcd91c92df5d60dd38c862c110d9
+  nordic_nrf_mesh: 469eac5b312f1e29c2da8f0c7c85c8d576f823bd
+  nRFMeshProvision: 0f0a0b9e83e4a77bb4df1b7dfdb3838f526875d0
+  permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
+  Protobuf: 120350fc38646e2dedc26f49ecba778184ea1de2
+  reactive_ble_mobile: 9ce6723d37ccf701dbffd202d487f23f5de03b4c
+  SwiftProtobuf: b02b5075dcf60c9f5f403000b3b0c202a11b6ae1
+
+PODFILE CHECKSUM: 128b388d0d827f7e3f8a3286f565f4414fc370a7
+
+COCOAPODS: 1.11.3
