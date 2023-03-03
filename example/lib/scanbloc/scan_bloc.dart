@@ -10,10 +10,16 @@ import 'package:permission_handler/permission_handler.dart';
 part 'scan_event.dart';
 part 'scan_state.dart';
 
+
+
+// This is the BLoC that handles the scanning of devices
+// It is responsible for requesting permissions and scanning for devices
+// It also handles the provisioning of devices
+
 class ScanBloc extends Bloc<ScanEvent, ScanState> {
   final Golain _golain = Golain();
 
-  ScanBloc() : super(ScanningInitial()) {
+  ScanBloc() : super(ScanReady()) {
     on<PermissionRequested>((event, emit) async {
       try {
         await _requestPermissions();
@@ -22,6 +28,8 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
         emit(PermissionDenied());
       }
     });
+
+// This is the event that triggers the scanning of devices
 
     on<ScanRequested>((event, emit) async {
       try {
@@ -33,6 +41,9 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
       }
     });
 
+// This is the event that triggers the provisioning of devices
+
+
     on<Provision>((event, emit) async {
       try {
         await _golain.provisionDevice(event.device);
@@ -43,6 +54,12 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
     });
   }
 }
+
+// This is the function that requests permissions
+// It checks the platform and the version of the Android device
+// If the device is running Android 12 or higher, it requests the new permissions
+// If the device is running Android 11 or lower, it requests the old permissions
+
 
 Future<void> _requestPermissions() async {
   if (defaultTargetPlatform == TargetPlatform.android) {

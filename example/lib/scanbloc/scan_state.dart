@@ -8,7 +8,7 @@ abstract class ScanState extends Equatable {
   List<Object> get props => [];
 }
 
-class ScanningInitial extends ScanState {}
+class ScanReady extends ScanState {}
 
 class PermissionGranted extends ScanState {}
 
