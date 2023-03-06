@@ -15,3 +15,7 @@ class Provision extends ScanEvent {
   DiscoveredDevice device;
   Provision(this.device);
 }
+
+class ProvisionedDevicesRequested extends ScanEvent {}
+
+class ConnectToDevice extends ScanEvent {}

@@ -11,11 +11,11 @@ class Scanning extends StatefulWidget {
 }
 
 class _ScanningState extends State<Scanning> {
-  @override
-  void dispose() {
-    BlocProvider.of(context).close();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   BlocProvider.of(context).close();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -41,29 +41,29 @@ class _ScanningState extends State<Scanning> {
                 return const CircularProgressIndicator();
               case ScanningSuccess:
                 final successState = state as ScanningSuccess;
-                  return ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: successState.scannedDevices.length,
-                    itemBuilder: (context, index) {
-                      final scannedDevices = (state).scannedDevices;
-                      return ElevatedButton(
-                        onPressed: () {
-                          BlocProvider.of<ScanBloc>(context)
-                              .add(Provision(scannedDevices[index]));
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProvisionedNodes(
-                                      scannedDevices[index])));
-                        },
-                        child: ListTile(
-                          title: Text(scannedDevices[index].name),
-                          subtitle: Text(scannedDevices[index].id),
-                        ),
-                      );
-                    },
-                  );
+                return ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: successState.scannedDevices.length,
+                  itemBuilder: (context, index) {
+                    final scannedDevices = (state).scannedDevices;
+                    return ElevatedButton(
+                      onPressed: () {
+                        BlocProvider.of<ScanBloc>(context)
+                            .add(Provision(scannedDevices[index]));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ProvisionedNodes(scannedDevices[index])));
+                      },
+                      child: ListTile(
+                        title: Text(scannedDevices[index].name),
+                        subtitle: Text(scannedDevices[index].id),
+                      ),
+                    );
+                  },
+                );
               case ScanningFailure:
                 final failureState = state as ScanningFailure;
                 return Text(failureState.message.toString());

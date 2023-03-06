@@ -33,3 +33,35 @@ class ScanningFailure extends ScanState {
 }
 
 class Provisioned extends ScanState {}
+
+class ProvisionedDevices extends ScanState {
+  final List<DiscoveredDevice> provisionedDevices;
+  const ProvisionedDevices(this.provisionedDevices);
+
+  @override
+  List<Object> get props => [provisionedDevices];
+}
+
+class ProvisionDeviceRequestFailure extends ScanState {
+  final String message;
+  const ProvisionDeviceRequestFailure(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class ConnectedDevice extends ScanState{
+  final String message;
+  const ConnectedDevice(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class ConnectionFailure extends ScanState{
+  final String message;
+  const ConnectionFailure(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
