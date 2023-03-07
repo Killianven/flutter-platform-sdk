@@ -25,7 +25,7 @@ class _ProvisionedNodesState extends State<ProvisionedNodes> {
               title: Text(widget.device.name),
               subtitle: Text(widget.device.id),
             ),
-            ElevatedButton(
+            ElevatedButton( 
                 onPressed: () async {
                   BlocProvider.of<ScanBloc>(context).add(ConnectToDevice());
                 },
