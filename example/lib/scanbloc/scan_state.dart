@@ -14,6 +14,17 @@ class PermissionGranted extends ScanState {}
 
 class PermissionDenied extends ScanState {}
 
+class LoadingState extends ScanState {}
+
+class ResetMeshNetworkSuccess extends ScanState {}
+
+class ResetMeshNetworkFailure extends ScanState {
+  final String message;
+  const ResetMeshNetworkFailure(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
 class ScanningSuccess extends ScanState {
   final List<DiscoveredDevice> scannedDevices;
   const ScanningSuccess(this.scannedDevices);
@@ -21,8 +32,6 @@ class ScanningSuccess extends ScanState {
   @override
   List<Object> get props => [scannedDevices];
 }
-
-class ScanningInProgress extends ScanState {}
 
 class ScanningFailure extends ScanState {
   final String message;
@@ -50,7 +59,7 @@ class ProvisionDeviceRequestFailure extends ScanState {
   List<Object> get props => [message];
 }
 
-class ConnectedDevice extends ScanState{
+class ConnectedDevice extends ScanState {
   final String message;
   const ConnectedDevice(this.message);
 
@@ -58,10 +67,50 @@ class ConnectedDevice extends ScanState{
   List<Object> get props => [message];
 }
 
-class ConnectionFailure extends ScanState{
+class ConnectionFailure extends ScanState {
   final String message;
   const ConnectionFailure(this.message);
 
   @override
   List<Object> get props => [message];
+}
+
+class VendorModelDataGetSuccess extends ScanState {
+  final VendorModelMessageData data;
+  const VendorModelDataGetSuccess(this.data);
+
+  @override
+  List<Object> get props => [data];
+}
+
+class VendorModelDataFailure extends ScanState {
+  final String error;
+  const VendorModelDataFailure(this.error);
+
+  @override
+  List<Object> get props => [error];
+}
+
+class VendorModelControlGetSuccess extends ScanState {
+  final VendorModelMessageData data;
+  const VendorModelControlGetSuccess(this.data);
+
+  @override
+  List<Object> get props => [data];
+}
+
+class VendorModelControlSetSuccess extends ScanState {
+  final VendorModelMessageData data;
+  const VendorModelControlSetSuccess(this.data);
+
+  @override
+  List<Object> get props => [data];
+}
+
+class VendorModelControlFailure extends ScanState {
+  final String error;
+  const VendorModelControlFailure(this.error);
+
+  @override
+  List<Object> get props => [error];
 }
