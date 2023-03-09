@@ -17,6 +17,7 @@ dependencies:
   nordic_nrf_mesh:
     git:
       url: https://github.com/golain-io/nrf_mesh_plugin
+      ref: master
   logger: ^1.2.2
 
 dev_dependencies:
