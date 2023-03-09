@@ -1,7 +1,6 @@
-
-import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:golain/golain.dart';
@@ -35,8 +34,8 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion =
-          await _golainPlugin.getPlatformVersion() ?? 'Unknown platform version';
+      platformVersion = await _golainPlugin.getPlatformVersion() ??
+          'Unknown platform version';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -53,20 +52,20 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ScanBloc>(
+          create: (context) => ScanBloc(),
         ),
-        body:MultiBlocProvider(
-          providers: [
-            BlocProvider<ScanBloc>(
-              create: (context) => ScanBloc(),
-            ),
-          ],
-          child: const Scanning(),
+      ],
+      child: MaterialApp(
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text('Plugin example app'),
+          ),
+          body: const Scanning(),
         ),
-        ),
-      );
+      ),
+    );
   }
 }
