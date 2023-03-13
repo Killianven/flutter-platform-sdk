@@ -121,7 +121,7 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
     on<VendorModelControlSetRequested>((event, emit) async {
       try {
         final elementAddress = event.elementAddress;
-        final vendorModelData = await _golain.controlPlaneGet(
+        final vendorModelData = await _golain.controlPlaneSet(
           companyId: companyId,
           elementAddress: elementAddress,
           data: event.data,

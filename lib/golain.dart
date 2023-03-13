@@ -318,7 +318,6 @@ class Golain {
   /// Passed Model ID is concatenated with the [companyId] to form the model ID.
   Future<VendorModelMessageData> controlPlaneSet({
     required int elementAddress,
-    required int modelId,
     required int companyId,
     required int opcode,
     required Uint8List data,
