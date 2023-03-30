@@ -142,7 +142,7 @@ class Golain {
       }
 
       final provisioningEvent = ProvisioningEvent();
-      final provisionedMeshNode = _nordicNrfMesh
+      final provisionedMeshNode = await _nordicNrfMesh
           .provisioning(
             _meshManagerApi,
             BleMeshManager(),
@@ -151,13 +151,13 @@ class Golain {
             events: provisioningEvent,
           )
           .timeout(const Duration(minutes: 1));
-
-      unawaited(provisionedMeshNode.then((node) {
-        log('Provisioning successful');
-      }).catchError((_) {
-        log('Provisioning failed');
-        scanUnprovisionedDevices(duration: const Duration(seconds: 10));
-      }));
+      log('Provisioning successful');
+      // provisionedMeshNode.then((node) {
+      //   log('Provisioning successful');
+      // }).catchError((_) {
+      //   log('Provisioning failed');
+      //   scanUnprovisionedDevices(duration: const Duration(seconds: 10));
+      // });
     } catch (e) {
       log(e.toString());
     } finally {

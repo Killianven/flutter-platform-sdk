@@ -61,7 +61,7 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
       emit(LoadingState());
       try {
         await _golain.provisionDevice(event.device);
-        emit(Provisioned());
+        emit(Provisioned(device: event.device));
       } catch (e) {
         emit(ScanningFailure(e.toString()));
       }

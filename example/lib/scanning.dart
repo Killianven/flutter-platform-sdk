@@ -3,14 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:golain_example/provisionedNodes.dart';
 import 'package:golain_example/scanbloc/scan_bloc.dart';
 
-class Scanning extends StatefulWidget {
+class Scanning extends StatelessWidget {
   const Scanning({super.key});
-
-  @override
-  State<Scanning> createState() => _ScanningState();
-}
-
-class _ScanningState extends State<Scanning> {
 
   @override
   Widget build(BuildContext context) {
@@ -36,45 +30,50 @@ class _ScanningState extends State<Scanning> {
             },
             child: const Text('Scan for devices'),
           ),
-          BlocBuilder<ScanBloc, ScanState>(builder: (context, state) {
-            switch (state.runtimeType) {
-              case LoadingState:
-                return const CircularProgressIndicator();
-              case ScanningSuccess:
-                final successState = state as ScanningSuccess;
-                return ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: successState.scannedDevices.length,
-                  itemBuilder: (context, index) {
-                    final scannedDevices = (state).scannedDevices;
-                    return ElevatedButton(
-                      onPressed: () {
-                        BlocProvider.of<ScanBloc>(context).add(
-                          Provision(scannedDevices[index]),
-                        );
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ProvisionedNodes(scannedDevices[index]),
-                          ),
-                        );
-                      },
-                      child: ListTile(
-                        title: Text(scannedDevices[index].name),
-                        subtitle: Text(scannedDevices[index].id),
-                      ),
-                    );
-                  },
+          BlocConsumer<ScanBloc, ScanState>(
+            listener: (context, state) {
+              if (state is Provisioned) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProvisionedNodes(state.device),
+                  ),
                 );
-              case ScanningFailure:
-                final failureState = state as ScanningFailure;
-                return Text(failureState.message.toString());
-              default:
-                return const Text('No state');
-            }
-          }),
+              }
+            },
+            builder: (context, state) {
+              switch (state.runtimeType) {
+                case LoadingState:
+                  return const CircularProgressIndicator();
+                case ScanningSuccess:
+                  final successState = state as ScanningSuccess;
+                  return ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: successState.scannedDevices.length,
+                    itemBuilder: (context, index) {
+                      final scannedDevices = (state).scannedDevices;
+                      return ElevatedButton(
+                        onPressed: () {
+                          BlocProvider.of<ScanBloc>(context).add(
+                            Provision(scannedDevices[index]),
+                          );
+                        },
+                        child: ListTile(
+                          title: Text(scannedDevices[index].name),
+                          subtitle: Text(scannedDevices[index].id),
+                        ),
+                      );
+                    },
+                  );
+                case ScanningFailure:
+                  final failureState = state as ScanningFailure;
+                  return Text(failureState.message.toString());
+                default:
+                  return const Text('No state');
+              }
+            },
+          ),
         ],
       ),
     );

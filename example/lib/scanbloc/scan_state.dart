@@ -41,7 +41,12 @@ class ScanningFailure extends ScanState {
   List<Object> get props => [message];
 }
 
-class Provisioned extends ScanState {}
+class Provisioned extends ScanState {
+  final DiscoveredDevice device;
+  const Provisioned({
+    required this.device,
+  });
+}
 
 class ProvisionedDevices extends ScanState {
   final List<DiscoveredDevice> provisionedDevices;
