@@ -60,7 +60,7 @@ class _ProvisionedNodesState extends State<ProvisionedNodes> {
             ElevatedButton(
                 onPressed: () async {
                   BlocProvider.of<ScanBloc>(context).add(
-                    ConnectToDevice(provisionedDevices),
+                    ConnectToDevice(widget.device),
                   );
                 },
                 child: Text('Connect to ${widget.device.name}')),

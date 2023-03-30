@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:nordic_nrf_mesh/nordic_nrf_mesh.dart';
 
@@ -197,17 +198,16 @@ class Golain {
   /// Pass the List of [DiscoveredDevice]s that you want to connect to.
   Future<void> connectToDevice({
     required int companyId,
-    required List<DiscoveredDevice> devices,
+    required DiscoveredDevice device,
   }) async {
     bleMeshManager.callbacks = DoozProvisionedBleMeshManagerCallbacks(
       _meshManagerApi,
       bleMeshManager,
     );
-    for (DiscoveredDevice device in devices) {
-      // await provisionDevice(device);
-      log('device: ${device.id}  connecting...');
-      await bleMeshManager.connect(device);
-    }
+
+    log('device: ${device.id} connecting...');
+    await bleMeshManager.connect(device);
+
     //first one is the default provisioner which is to be ignored
     List<ProvisionedMeshNode> nodes =
         (await _meshManagerApi.meshNetwork!.nodes).skip(1).toList();
