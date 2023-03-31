@@ -151,6 +151,18 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
         emit(VendorModelDataFailure(e.toString()));
       }
     });
+
+    on<DeprovisioningRequested>((event, emit) async {
+      emit(LoadingState());
+      try {
+        final message = await _golain.deprovisionNode(
+          unicastAddress: event.elementAddress,
+        );
+        emit(DeprovisioningSuccess(message));
+      } catch (e) {
+        emit(DeprovisioningFailure(e.toString()));
+      }
+    });
   }
 }
 

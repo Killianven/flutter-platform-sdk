@@ -15,6 +15,8 @@ class VendorModel extends StatelessWidget {
         TextEditingController();
     TextEditingController controlPlaneElementAddressController =
         TextEditingController();
+    TextEditingController deprovisionElementAddressController =
+        TextEditingController();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Vendor Model'),
@@ -48,6 +50,22 @@ class VendorModel extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Vendor Model Message: ${state.error}'),
+              ),
+            );
+          }
+
+          if (state is DeprovisioningSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+          }
+
+          if (state is DeprovisioningFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
               ),
             );
           }
@@ -114,6 +132,28 @@ class VendorModel extends StatelessWidget {
                     },
                     child: const Text('Get'),
                   ),
+                ],
+              ),
+              ExpansionTile(
+                key: const ValueKey('module-send-deprovisioning-form'),
+                title: const Text('Send a deprovisioning'),
+                children: <Widget>[
+                  TextField(
+                    key: const ValueKey('module-send-deprovisioning-address'),
+                    decoration:
+                        const InputDecoration(hintText: 'Element Address'),
+                    controller: deprovisionElementAddressController,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      BlocProvider.of<ScanBloc>(context).add(
+                        DeprovisioningRequested(
+                          int.parse(deprovisionElementAddressController.text),
+                        ),
+                      );
+                    },
+                    child: const Text('Send node reset'),
+                  )
                 ],
               )
             ],

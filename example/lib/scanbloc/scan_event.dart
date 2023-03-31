@@ -52,3 +52,8 @@ class VendorModelControlSetRequested extends ScanEvent {
     this.data,
   );
 }
+
+class DeprovisioningRequested extends ScanEvent {
+  final int elementAddress;
+  const DeprovisioningRequested(this.elementAddress);
+}
