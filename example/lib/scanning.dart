@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:golain_example/provisionedNodes.dart';
 import 'package:golain_example/scanbloc/scan_bloc.dart';
 
@@ -33,6 +34,14 @@ class Scanning extends StatelessWidget {
           BlocConsumer<ScanBloc, ScanState>(
             listener: (context, state) {
               if (state is Provisioned) {
+                Fluttertoast.showToast(
+                    msg: "Provisioned",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.green,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -46,6 +55,14 @@ class Scanning extends StatelessWidget {
                 case LoadingState:
                   return const CircularProgressIndicator();
                 case ScanningSuccess:
+                  Fluttertoast.showToast(
+                      msg: "Scanning Success",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.green,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
                   final successState = state as ScanningSuccess;
                   return ListView.builder(
                     scrollDirection: Axis.vertical,
@@ -68,6 +85,14 @@ class Scanning extends StatelessWidget {
                   );
                 case ScanningFailure:
                   final failureState = state as ScanningFailure;
+                  Fluttertoast.showToast(
+                      msg: failureState.message.toString(),
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
                   return Text(failureState.message.toString());
                 default:
                   return const Text('No state');

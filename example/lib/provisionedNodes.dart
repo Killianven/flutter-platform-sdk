@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:golain_example/scanbloc/scan_bloc.dart';
 
 import 'vendor_model.dart';
@@ -25,7 +26,9 @@ class _ProvisionedNodesState extends State<ProvisionedNodes> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const VendorModel(),
+              builder: (context) =>  VendorModel(
+               widget.device,
+              ),
             ),
           );
         }
@@ -70,6 +73,7 @@ class _ProvisionedNodesState extends State<ProvisionedNodes> {
                   return const CircularProgressIndicator();
                 }
                 if (state is ConnectedDevice) {
+                  Fluttertoast.showToast(msg: 'Device Connected Successfully! ', backgroundColor: Colors.green );
                   return Text(state.message);
                 } else if (state is ProvisionedDevices) {
                   return ListView.builder(
@@ -85,6 +89,7 @@ class _ProvisionedNodesState extends State<ProvisionedNodes> {
                     },
                   );
                 } else if (state is ConnectionFailure) {
+                  Fluttertoast.showToast(msg: 'Connection Failed, Try connecting again! ', backgroundColor: Colors.red );
                   return Text(state.message);
                 } else {
                   return const Text('Not Connected');
