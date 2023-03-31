@@ -88,7 +88,9 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
       try {
         await _golain
             .connectToDevice(
-                companyId: companyId, devices: event.provisionedDevices)
+              companyId: companyId,
+              device: event.provisionedDevice,
+            )
             .timeout(
               const Duration(seconds: 20),
               onTimeout: () => throw Exception('Connection timed out'),

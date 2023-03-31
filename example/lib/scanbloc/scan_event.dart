@@ -22,8 +22,8 @@ class Provision extends ScanEvent {
 class ProvisionedDevicesRequested extends ScanEvent {}
 
 class ConnectToDevice extends ScanEvent {
-  final List<DiscoveredDevice> provisionedDevices;
-  const ConnectToDevice(this.provisionedDevices);
+  final DiscoveredDevice provisionedDevice;
+  const ConnectToDevice(this.provisionedDevice);
 }
 
 class VendorModelDataGetRequested extends ScanEvent {
