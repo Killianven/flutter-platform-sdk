@@ -151,13 +151,6 @@ class Golain {
             events: provisioningEvent,
           )
           .timeout(const Duration(minutes: 1));
-      log('Provisioning successful');
-      // provisionedMeshNode.then((node) {
-      //   log('Provisioning successful');
-      // }).catchError((_) {
-      //   log('Provisioning failed');
-      //   scanUnprovisionedDevices(duration: const Duration(seconds: 10));
-      // });
     } catch (e) {
       log(e.toString());
     } finally {
