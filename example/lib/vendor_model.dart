@@ -17,6 +17,8 @@ class VendorModel extends StatelessWidget {
         TextEditingController();
     TextEditingController controlPlaneElementAddressController =
         TextEditingController();
+    TextEditingController deprovisionElementAddressController =
+        TextEditingController();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Vendor Model'),
@@ -30,20 +32,57 @@ class VendorModel extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
               ),
-            ),
-          ),
-          ListTile(
-            title: Text(device.name),
-            subtitle: Text(device.id),
-          ),
-          BlocConsumer<ScanBloc, ScanState>(
-            listener: (context, state) {
-              // TODO: implement listener
-              if (state is VendorModelDataGetSuccess) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content:
-                        Text('Vendor Model Message: ${state.data.message}'),
+            );
+          }
+          if (state is VendorModelDataFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Vendor Model Message: ${state.error}'),
+              ),
+            );
+          }
+          if (state is VendorModelControlGetSuccess) {
+            final message = shadow.fromBuffer(state.data.message.toList());
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Vendor Model Message: $message'),
+              ),
+            );
+          }
+          if (state is VendorModelControlFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Vendor Model Message: ${state.error}'),
+              ),
+            );
+          }
+
+          if (state is DeprovisioningSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+          }
+
+          if (state is DeprovisioningFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          return ListView(
+            children: [
+              ExpansionTile(
+                title: const Text('Vendor Model Data plane '),
+                children: [
+                  TextField(
+                    decoration:
+                        const InputDecoration(hintText: 'Element Address'),
+                    controller: dataPlaneElementAddressController,
                   ),
                 );
               }
@@ -143,11 +182,33 @@ class VendorModel extends StatelessWidget {
                       )
                     ],
                   ),
-                ),
-              );
-            },
-          ),
-        ],
+                ],
+              ),
+              ExpansionTile(
+                key: const ValueKey('module-send-deprovisioning-form'),
+                title: const Text('Send a deprovisioning'),
+                children: <Widget>[
+                  TextField(
+                    key: const ValueKey('module-send-deprovisioning-address'),
+                    decoration:
+                        const InputDecoration(hintText: 'Element Address'),
+                    controller: deprovisionElementAddressController,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      BlocProvider.of<ScanBloc>(context).add(
+                        DeprovisioningRequested(
+                          int.parse(deprovisionElementAddressController.text),
+                        ),
+                      );
+                    },
+                    child: const Text('Send node reset'),
+                  )
+                ],
+              )
+            ],
+          );
+        },
       ),
     );
   }

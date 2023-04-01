@@ -119,3 +119,19 @@ class VendorModelControlFailure extends ScanState {
   @override
   List<Object> get props => [error];
 }
+
+class DeprovisioningSuccess extends ScanState {
+  final String message;
+  const DeprovisioningSuccess(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class DeprovisioningFailure extends ScanState {
+  final String message;
+  const DeprovisioningFailure(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

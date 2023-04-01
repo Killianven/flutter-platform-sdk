@@ -331,4 +331,29 @@ class Golain {
 
     return vendorMessage;
   }
+
+  /// Deprovision the node.
+  /// 
+  /// Pass the [unicastAddress] of the node to be deprovisioned.
+  Future<String> deprovisionNode({
+    required int unicastAddress,
+    Duration timeout = const Duration(seconds: 10),
+  }) async {
+    final node = await _meshManagerApi.meshNetwork!.getNode(unicastAddress);
+    final nodes = await _meshManagerApi.meshNetwork!.nodes;
+    try {
+      final provisionedNode =
+          nodes.firstWhere((element) => element.uuid == node!.uuid);
+      await _meshManagerApi.deprovision(provisionedNode).timeout(timeout);
+      return 'Node deprovisioned';
+    } on TimeoutException catch (_) {
+      return 'Board didn\'t respond';
+    } on PlatformException catch (e) {
+      return e.toString();
+    } on StateError catch (_) {
+      return 'No node found with this uuid';
+    } catch (e) {
+      return e.toString();
+    }
+  }
 }
