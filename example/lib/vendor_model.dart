@@ -35,6 +35,14 @@ class VendorModel extends StatelessWidget {
               ),
             ),
           ),
+          Text(
+            'Device Name: ${device.name}',
+            style: const TextStyle(fontSize: 15),
+          ),
+          Text(
+            'Device ID: ${device.id}',
+            style: const TextStyle(fontSize: 15),
+          ),
           BlocConsumer<ScanBloc, ScanState>(listener: (context, state) {
             if (state is VendorModelDataFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
