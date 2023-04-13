@@ -69,9 +69,11 @@ Bluetooth Mesh SDK is a software development kit that allows developers to creat
 1. Go to the pubspec.yaml file of your project and add the following line to the dependencies section:
 
 ```yaml
-nordic_nrf_mesh:
+#Golain BLE Mesh Plugin
+  golain:
     git:
-      url: https://github.com/golain-io/nrf_mesh_plugin
+      url: https://github.com/golain-io/golain-mobile-shell.git
+      ref: main
 ``` 
 
 ### Android
