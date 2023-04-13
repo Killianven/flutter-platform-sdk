@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:nordic_nrf_mesh/nordic_nrf_mesh.dart';
@@ -63,9 +62,31 @@ class Golain {
     await _meshManagerApi.loadMeshNetwork();
   }
 
+  Future<IMeshNetwork> importMeshNetwork(File file) async{
+    final newfile = await file.readAsString();
+     return _meshManagerApi.importMeshNetworkJson(newfile);
+  }
+
   /// Resets the mesh network stored in phones cache.
   void resetMeshNetwork() async {
     await _meshManagerApi.resetMeshNetwork();
+  }
+
+  /// Creates a group with the given [groupName].
+  Future<GroupData> createGroup(String groupName) async {
+    var data = await _meshManagerApi.meshNetwork!.addGroupWithName(groupName);
+    return data!;
+  }
+
+  /// Removes the group with the given [address].
+  void removeGroup(String address) async {
+    await _meshManagerApi.meshNetwork!.removeGroup(int.parse(address));
+  }
+
+  Future<List<ElementData>> getElementsForGroup(String address) async {
+    var elements =
+        await _meshManagerApi.meshNetwork!.elementsForGroup(int.parse(address));
+    return elements;
   }
 
   /// Scans for unprovisioned devices.
@@ -333,7 +354,7 @@ class Golain {
   }
 
   /// Deprovision the node.
-  /// 
+  ///
   /// Pass the [unicastAddress] of the node to be deprovisioned.
   Future<String> deprovisionNode({
     required int unicastAddress,
@@ -356,4 +377,30 @@ class Golain {
       return e.toString();
     }
   }
+  
+  /// Send Config Model Publication Set
+  
+  Future<ConfigModelPublicationStatus> sendPublication(
+      {selectedElementAddress, selectedSubscriptionAddress, selectedModelId}) {
+    return _meshManagerApi
+        .sendConfigModelPublicationSet(selectedElementAddress,
+            selectedSubscriptionAddress, selectedModelId)
+        .timeout(const Duration(seconds: 40));
+  }
+
+
+  /// Send Config Model Subscription Add
+   
+   Future<ConfigModelSubscriptionStatus> sendSubscription({
+    selectedElementAddress,
+    selectedSubscriptionAddress,
+    selectedModelId,
+   }){
+    return _meshManagerApi
+        .sendConfigModelSubscriptionAdd(selectedElementAddress,
+            selectedSubscriptionAddress, selectedModelId)
+        .timeout(const Duration(seconds: 40));
+   }
+  
+  
 }
