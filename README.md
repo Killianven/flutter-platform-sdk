@@ -1,3 +1,37 @@
+# WIP
+### Expected Functionality and Features
+
+#### Top level features BLE Mesh
+
+- [x] Scan for nearby BLE devices
+- [x] Connect to a BLE device
+- [x] Provision a BLE device
+- [x] Add a BLE device to a Mesh Network
+- [] Remove devices from network (deprovision)
+- [] Bulk Provisioning of BLE devices
+- [] Identify devices being provisioned / deprovisioned
+- [x] Send and receive data from a BLE device
+- [] Send and receive data from multiple BLE devices simlutaneously (purely through groups)
+- [] Groups support for sending and receiving data from multiple BLE devices
+
+#### Code level BLE Mesh features for developer health
+- [] APIs for listing nearby BLE devices
+`GolainMeshManager.getProvisionedDevices(callback: (result: Result<List<?????>, GolainError>) -> Unit)`
+`GolainMeshManager.getConnectedDevices(callback: (result: Result<List<ProvisionedNode>, GolainError>) -> Unit)`
+- [] APIs for deprovisioning
+`GolainMeshManager.deprovisionDevice(deviceId: String, callback: (result: Result<String, GolainError>) -> Unit)`
+- [] APIs for bulk provisioning
+`GolainMeshManager.bulkProvisionDevices(devices: List<DiscoveredDevice>, callback: (result: Result<String, GolainError>) -> Unit)`
+- [] APIs for identifying devices being provisioned / deprovisioned
+`GolainMeshManager.identifyDevice(device: DiscoveredDevice, callback: (result: Result<String, GolainError>) -> Unit)`
+- [] APIs for groups support for sending and receiving data from multiple BLE devices
+`GolainMeshManager.createGroup(groupName: String, callback: (result: Result<String, GolainError>) -> Unit)`
+`GolainMeshManager.addDevicesToGroup(deviceId: List<ProvisionedNode>, groupName: String, callback: (result: Result<String, GolainError>) -> Unit)`
+`GolainMeshManager.removeDeviceFromGroup(device: ProvisionedNode, groupName: String, callback: (result: Result<String, GolainError>) -> Unit)`
+`GolainMeshManager.deleteGroup(groupName: String, callback: (result: Result<String, GolainError>) -> Unit)`
+`GolainMeshManager.sendDataToGroup(groupName: String, data: List<Uint8>, callback: (result: Result<String, GolainError>) -> Unit)`
+
+
 # Golain Mobile Plugin
 
 ### What are Low energy Bluetooth Mesh Devices?
