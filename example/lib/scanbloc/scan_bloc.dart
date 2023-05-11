@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -41,6 +42,29 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
         emit(ResetMeshNetworkFailure(e.toString()));
       }
     });
+
+     on<ExportMeshNetwork>((event, emit) async {
+      emit(LoadingState());
+      try {
+        final meshNetwork = await _golain.exportMeshNetwork();
+        emit(ExportMeshNetworkSuccess(meshNetwork));
+      } catch (e) {
+        emit(ExportMeshNetworkFailure(e.toString()));
+      }
+    });
+
+     on<ImportMeshNetwork>(
+      (event, emit) {
+        emit(LoadingState());
+        try {
+          _golain.importMeshNetwork(event.filePath);
+          emit(const ImportMeshNetworkSuccess(
+              'Mesh Network Imported Successfully'));
+        } catch (e) {
+          emit(ImportMeshNetworkFailure(e.toString()));
+        }
+      },
+    );
 
 // This is the event that triggers the scanning of devices
 
@@ -86,7 +110,7 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
     on<ConnectToDevice>((event, emit) async {
       emit(LoadingState());
       try {
-        await _golain
+        int elementAddress= await _golain
             .connectToDevice(
               companyId: companyId,
               device: event.provisionedDevice,
@@ -95,7 +119,7 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
               const Duration(seconds: 20),
               onTimeout: () => throw Exception('Connection timed out'),
             );
-        emit(const ConnectedDevice('Connected to device'));
+        emit(ConnectedDevice(elementAddress));
       } catch (e) {
         emit(ConnectionFailure(e.toString()));
       }

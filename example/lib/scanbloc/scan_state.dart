@@ -25,6 +25,38 @@ class ResetMeshNetworkFailure extends ScanState {
   @override
   List<Object> get props => [message];
 }
+
+class ImportMeshNetworkSuccess extends ScanState {
+  final String message;
+  const ImportMeshNetworkSuccess(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class ImportMeshNetworkFailure extends ScanState {
+  final String message;
+  const ImportMeshNetworkFailure(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class ExportMeshNetworkSuccess extends ScanState {
+  final String message;
+  const ExportMeshNetworkSuccess(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class ExportMeshNetworkFailure extends ScanState {
+  final String message;
+  const ExportMeshNetworkFailure(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
 class ScanningSuccess extends ScanState {
   final List<DiscoveredDevice> scannedDevices;
   const ScanningSuccess(this.scannedDevices);
@@ -65,11 +97,11 @@ class ProvisionDeviceRequestFailure extends ScanState {
 }
 
 class ConnectedDevice extends ScanState {
-  final String message;
-  const ConnectedDevice(this.message);
+  final int elementAddress;
+  const ConnectedDevice(this.elementAddress);
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [elementAddress];
 }
 
 class ConnectionFailure extends ScanState {

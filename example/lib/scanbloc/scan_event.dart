@@ -14,6 +14,12 @@ class ScanRequested extends ScanEvent {}
 
 class ResetMeshNetwork extends ScanEvent {}
 
+class ExportMeshNetwork extends ScanEvent {}
+
+class ImportMeshNetwork extends ScanEvent {
+  final File filePath;
+  const ImportMeshNetwork(this.filePath);
+}
 class Provision extends ScanEvent {
   final DiscoveredDevice device;
   const Provision(this.device);

@@ -67,6 +67,15 @@ class Golain {
      return _meshManagerApi.importMeshNetworkJson(newfile);
   }
 
+   /// Exports the mesh network stored in phones cache.
+  Future<String> exportMeshNetwork() async{
+    if(_meshManagerApi.meshNetwork == null){
+      throw Exception("Mesh Network not loaded");
+    }
+    final String? meshNetwork= await _meshManagerApi.exportMeshNetwork();
+    return meshNetwork!;
+  }
+
   /// Resets the mesh network stored in phones cache.
   void resetMeshNetwork() async {
     await _meshManagerApi.resetMeshNetwork();
@@ -210,7 +219,8 @@ class Golain {
   /// Connect to the devices.
   ///
   /// Pass the List of [DiscoveredDevice]s that you want to connect to.
-  Future<void> connectToDevice({
+  /// Returns the element address of the device.
+  Future<int> connectToDevice({
     required int companyId,
     required DiscoveredDevice device,
   }) async {
@@ -258,10 +268,12 @@ class Golain {
               passedModelId,
             );
             log('Binding successful for model ${model.modelId}');
+            return element.address;
           }
         }
       }
     }
+    return -1;
   }
 
   /// Disconnects from the devices.
