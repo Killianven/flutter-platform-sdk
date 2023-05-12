@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -74,7 +76,9 @@ class _ProvisionedNodesState extends State<ProvisionedNodes> {
                 }
                 if (state is ConnectedDevice) {
                   Fluttertoast.showToast(msg: 'Device Connected Successfully! ', backgroundColor: Colors.green );
-                  return Text(state.message);
+                  log('element address: '+ state.elementAddress.toString());
+                  return Text('Element address is'+ state.elementAddress.toString());
+                  
                 } else if (state is ProvisionedDevices) {
                   return ListView.builder(
                     scrollDirection: Axis.vertical,

@@ -1,3 +1,7 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -25,6 +29,31 @@ class Scanning extends StatelessWidget {
             },
             child: const Text('Reset Mesh Network'),
           ),
+          ElevatedButton(
+              onPressed: () async {
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  type: FileType.custom,
+                  allowedExtensions: ['json'],
+                );
+                if (result != null) {
+                  File file = File(result.files.single.path!);
+                  BlocProvider.of<ScanBloc>(context)
+                      .add(ImportMeshNetwork(file));
+                }
+              },
+              child: const Text('Import Mesh Network')),
+          ElevatedButton(
+            child: const Text('Export mesh network'),
+            onPressed: () async {
+              BlocProvider.of<ScanBloc>(context).add(ExportMeshNetwork());
+            },
+          ),
+          BlocBuilder<ScanBloc, ScanState>(builder: (context, state) {
+            if (state is ExportMeshNetworkSuccess) {
+              log(state.message);
+            }
+            return const Text('');
+          }),
           ElevatedButton(
             onPressed: () async {
               BlocProvider.of<ScanBloc>(context).add(ScanRequested());
