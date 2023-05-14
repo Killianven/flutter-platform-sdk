@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:nordic_nrf_mesh/nordic_nrf_mesh.dart';
@@ -27,6 +27,7 @@ class Golain {
 
   StreamSubscription? _scanSubscription;
   StreamSubscription? _provisioningSubscription;
+  Dio dio = Dio();
 
   /// Initializes the streams required for the plugin and returns an instance of [Golain].
   Golain() {
@@ -413,6 +414,8 @@ class Golain {
             selectedSubscriptionAddress, selectedModelId)
         .timeout(const Duration(seconds: 40));
    }
+
+   
   
   
 }
