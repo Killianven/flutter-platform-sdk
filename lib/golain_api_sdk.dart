@@ -63,7 +63,7 @@ import 'package:golain/constants.dart';
     try {
       dio.options.headers['Authorization'] = "Bearer $authToken";
       dio.options.headers['ORG-ID'] = orgId;
-      final response = await dio.put(
+      final response = await dio.patch(
           '$baseUrl/$projectId/fleets/$fleetID/devices/$deviceId/shadow',
           data: shadowData);
       if (response.statusCode == 200) {
