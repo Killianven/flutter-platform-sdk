@@ -8,7 +8,7 @@ import 'package:golain/constants.dart';
   Dio dio = Dio();
 
  Future<Map<String, dynamic>> getDeviceShadow(
-      String fleetId, String deviceId, String authToken, String orgId, String projectId) async {
+      String fleetId, String deviceId, String authToken, String orgId, String projectId, String baseUrl) async {
     try {
       dio.options.headers['Authorization'] = "Bearer $authToken";
       dio.options.headers['ORG-ID'] = orgId;
@@ -33,7 +33,8 @@ import 'package:golain/constants.dart';
       String deviceId,
       String authToken,
       String orgId,
-      String shadowData) async {
+      String shadowData,
+      String baseUrl) async {
     try {
       dio.options.headers['Authorization'] = "Bearer $authToken";
       dio.options.headers['ORG-ID'] = orgId;
@@ -57,7 +58,8 @@ import 'package:golain/constants.dart';
       String deviceId,
       String shadowData,
       String authToken,
-      String orgId) async {
+      String orgId,
+      String baseUrl) async {
     try {
       dio.options.headers['Authorization'] = "Bearer $authToken";
       dio.options.headers['ORG-ID'] = orgId;
