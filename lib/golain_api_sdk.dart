@@ -89,7 +89,7 @@ import 'models/auth.dart';
  Future<List<Device>> getDevices(Fleet fleet, String authToken) async {
    dio.options.headers['Authorization'] = "Bearer ${authToken}";
   try {
-    Response response = await dio.get('fleetUrl/${fleet.id}/devices');
+    Response response = await dio.get('$baseUrl/${fleet.project_id}/fleets/${fleet.id}/devices');
     if (response.statusCode == 200) {
       log(response.data.toString());
       List<dynamic> data = response.data['data']['devices'];
