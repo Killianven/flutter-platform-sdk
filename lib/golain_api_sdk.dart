@@ -34,7 +34,7 @@ import 'models/auth.dart';
       dio.options.headers['Authorization'] = "Bearer ${authToken}";
     try {
       Response response = await dio.get(
-        "$baseUrl/${device.project_id}/fleets/${device.fleet_id}/devices/${device.id}/shadow",
+        "$baseUrl/core/api/v1/projects/${device.project_id}/fleets/${device.fleet_id}/devices/${device.id}/shadow",
       );
       if (response.statusCode == 200) {
         return response.data;
