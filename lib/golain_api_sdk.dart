@@ -54,7 +54,7 @@ import 'models/auth.dart';
          dio.options.headers['Authorization'] = "Bearer ${authToken}";
     try {
       final response = await dio.post(
-          '$baseUrl/${device.project_id}/fleets/${device.fleet_id}/devices/${device.id}/shadow',
+          '$baseUrl/core/api/v1/projects/${device.project_id}/fleets/${device.fleet_id}/devices/${device.id}/shadow',
           data: shadowData);
       if (response.statusCode == 200) {
         return response.data;
@@ -73,7 +73,7 @@ import 'models/auth.dart';
          dio.options.headers['Authorization'] = "Bearer ${authToken}";
     try {
       final response = await dio.patch(
-          '$baseUrl/${device.project_id}/fleets/${device.fleet_id}/devices/${device.id}/shadow',
+          '$baseUrl/core/api/v1/projects/${device.project_id}/fleets/${device.fleet_id}/devices/${device.id}/shadow',
           data: shadowData);
       if (response.statusCode == 200) {
         return response.data;
@@ -89,7 +89,7 @@ import 'models/auth.dart';
  Future<List<Device>> getDevices(Fleet fleet, String authToken) async {
    dio.options.headers['Authorization'] = "Bearer ${authToken}";
   try {
-    Response response = await dio.get('$baseUrl/${fleet.project_id}/fleets/${fleet.id}/devices');
+    Response response = await dio.get('$baseUrl/core/api/v1/projects/${fleet.project_id}/fleets/${fleet.id}/devices');
     if (response.statusCode == 200) {
       log(response.data.toString());
       List<dynamic> data = response.data['data']['devices'];
