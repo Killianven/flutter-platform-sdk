@@ -18,19 +18,20 @@ import 'models/auth.dart';
   Auth?   auth;
   String? fleetUrl;
 
-  GolainAPI (String baseUrl, String orgId, String projectId,String fleetUrl, Auth auth){
+  GolainAPI (String baseUrl, String orgId, String projectId,String fleetUrl){
     this.baseUrl = baseUrl;
     this.orgId = orgId;
     this.projectId = projectId;
     this.auth = auth;
     this.fleetUrl = fleetUrl;
-    dio.options.headers['Authorization'] = "Bearer ${auth.authToken}";
+   
     dio.options.headers['Content-Type'] = 'application/json';
     dio.options.headers['ORG-ID'] = orgId;
   }
 
  Future<Map<String, dynamic>> getDeviceShadow(
-     Device device) async {
+     Device device, String authToken) async {
+      dio.options.headers['Authorization'] = "Bearer ${authToken}";
     try {
       Response response = await dio.get(
         "$baseUrl/${device.project_id}/fleets/${device.fleet_id}/devices/${device.id}/shadow",
@@ -49,7 +50,8 @@ import 'models/auth.dart';
 //post request to create shadow
   Future<Map<String, dynamic>> createDeviceShadow(
       Device device,
-      String shadowData,) async {
+      String shadowData,String authToken) async {
+         dio.options.headers['Authorization'] = "Bearer ${authToken}";
     try {
       final response = await dio.post(
           '$baseUrl/${device.project_id}/fleets/${device.fleet_id}/devices/${device.id}/shadow',
@@ -67,7 +69,8 @@ import 'models/auth.dart';
 //put request to update shadow
   Future<Map<String, dynamic>> updateDeviceShadow(
     Device device,
-      String shadowData) async {
+      String shadowData, String authToken) async {
+         dio.options.headers['Authorization'] = "Bearer ${authToken}";
     try {
       final response = await dio.patch(
           '$baseUrl/${device.project_id}/fleets/${device.fleet_id}/devices/${device.id}/shadow',
@@ -83,7 +86,8 @@ import 'models/auth.dart';
  }
 
 
- Future<List<Device>> getDevices(Fleet fleet) async {
+ Future<List<Device>> getDevices(Fleet fleet, String authToken) async {
+   dio.options.headers['Authorization'] = "Bearer ${authToken}";
   try {
     Response response = await dio.get('fleetUrl/${fleet.id}/devices');
     if (response.statusCode == 200) {
@@ -103,7 +107,8 @@ import 'models/auth.dart';
   }
 }
 
-Future<List<Fleet>> getFleets() async {
+Future<List<Fleet>> getFleets(String authToken) async {
+   dio.options.headers['Authorization'] = "Bearer ${authToken}";
   try {
     Response response = await dio.get(fleetUrl!);
     if (response.statusCode == 200) {
