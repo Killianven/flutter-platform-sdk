@@ -4,20 +4,20 @@ part 'devices.g.dart';
 @JsonSerializable()
 class Device{
   String id;
-  String device_name;
-  String certificate_id;
-  String current_shadow;
-  String shadow_definition_id;
-  String status_flags;
-  bool connected;
-  String last_seen;
-  String topic_slug;
-  String fleet_id;
-  String project_id;
-  String org_id;
-  String updated_by;
-  String created_at;
-  String pending_ota_update_id;
+  String? device_name;
+  String? certificate_id;
+  String? current_shadow;
+  String? shadow_definition_id;
+  String? status_flags;
+  bool? connected;
+  String? last_seen;
+  String? topic_slug;
+  String? fleet_id;
+  String? project_id;
+  String? org_id;
+  String? updated_by;
+  String? created_at;
+  String? pending_ota_update_id;
   
   Device({
     required this.id,
