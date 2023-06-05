@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -14,7 +15,9 @@ class Golain {
     return GolainPlatform.instance.getPlatformVersion();
   }
 
+  StreamSubscription? _subscription;
   final NordicNrfMesh _nordicNrfMesh = NordicNrfMesh();
+  final FlutterReactiveBle _flutterReactiveBle = FlutterReactiveBle();
   late IMeshNetwork? _meshNetwork;
   late final MeshManagerApi _meshManagerApi;
   late final StreamSubscription<IMeshNetwork?> onNetworkUpdateSubscription;
@@ -28,6 +31,11 @@ class Golain {
   StreamSubscription? _scanSubscription;
   StreamSubscription? _provisioningSubscription;
   Dio dio = Dio();
+  final _devices = <DiscoveredDevice>[];
+  final _deviceConnectionController = StreamController<ConnectionStateUpdate>();
+
+  // ignore: cancel_subscriptions
+  late StreamSubscription<ConnectionStateUpdate> _connection;
 
   /// Initializes the streams required for the plugin and returns an instance of [Golain].
   Golain() {
@@ -63,17 +71,17 @@ class Golain {
     await _meshManagerApi.loadMeshNetwork();
   }
 
-  Future<IMeshNetwork> importMeshNetwork(File file) async{
+  Future<IMeshNetwork> importMeshNetwork(File file) async {
     final newfile = await file.readAsString();
-     return _meshManagerApi.importMeshNetworkJson(newfile);
+    return _meshManagerApi.importMeshNetworkJson(newfile);
   }
 
-   /// Exports the mesh network stored in phones cache.
-  Future<String> exportMeshNetwork() async{
-    if(_meshManagerApi.meshNetwork == null){
+  /// Exports the mesh network stored in phones cache.
+  Future<String> exportMeshNetwork() async {
+    if (_meshManagerApi.meshNetwork == null) {
       throw Exception("Mesh Network not loaded");
     }
-    final String? meshNetwork= await _meshManagerApi.exportMeshNetwork();
+    final String? meshNetwork = await _meshManagerApi.exportMeshNetwork();
     return meshNetwork!;
   }
 
@@ -390,9 +398,9 @@ class Golain {
       return e.toString();
     }
   }
-  
+
   /// Send Config Model Publication Set
-  
+
   Future<ConfigModelPublicationStatus> sendPublication(
       {selectedElementAddress, selectedSubscriptionAddress, selectedModelId}) {
     return _meshManagerApi
@@ -401,21 +409,148 @@ class Golain {
         .timeout(const Duration(seconds: 40));
   }
 
-
   /// Send Config Model Subscription Add
-   
-   Future<ConfigModelSubscriptionStatus> sendSubscription({
+
+  Future<ConfigModelSubscriptionStatus> sendSubscription({
     selectedElementAddress,
     selectedSubscriptionAddress,
     selectedModelId,
-   }){
+  }) {
     return _meshManagerApi
         .sendConfigModelSubscriptionAdd(selectedElementAddress,
             selectedSubscriptionAddress, selectedModelId)
         .timeout(const Duration(seconds: 40));
-   }
+  }
 
-   
-  
-  
+  // To scan for devices
+
+  Future<List<DiscoveredDevice>> scanBLEDevice(
+      List<Uuid> serviceIds, Duration duration) async {
+    try {
+      _devices.clear();
+      _subscription?.cancel();
+      _subscription = _flutterReactiveBle
+          .scanForDevices(withServices: serviceIds)
+          .listen((device) async {
+        isScanning = true;
+        final deviceIndex =
+            _devices.indexWhere((element) => element.id == device.id);
+        if (deviceIndex >= 0) {
+          _devices[deviceIndex] = device;
+        } else {
+          isScanning = false;
+          _devices.add(device);
+        }
+      });
+
+      return await Future.delayed(
+        Duration(seconds: duration.inSeconds),
+        () {
+          return _devices;
+        },
+      );
+    } catch (e) {
+      log(e.toString());
+    }
+    return _devices;
+  }
+
+  Future<void> stopScan() async {
+    log('Stop ble discovery');
+
+    await _subscription?.cancel();
+    _subscription = null;
+  }
+
+  /// To connect to the device
+  /// Pass the [device] to connect to the device.
+
+  Future<void> connectBLEDevice(DiscoveredDevice device) async {
+    try {
+      _connection = _flutterReactiveBle
+          .connectToDevice(id: device.id)
+          .listen((connectionState) {
+        log('Connection state: $connectionState');
+        _deviceConnectionController.add(connectionState);
+      });
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  /// To disconnect from the device
+  /// Pass the [device] to disconnect from the device.
+  /// Pass the [duration] to disconnect after the specified duration.
+
+  Future<void> disconnectBLEDevice(
+      DiscoveredDevice device, Duration duration) async {
+    try {
+      await _connection.cancel();
+    } catch (e) {
+      log(e.toString());
+    } finally {
+      _deviceConnectionController.add(ConnectionStateUpdate(
+          deviceId: device.id,
+          connectionState: DeviceConnectionState.disconnected,
+          failure: null));
+    }
+  }
+
+  Future<List<DiscoveredService>> discoverServices(
+      DiscoveredDevice device) async {
+    try {
+      final services = await _flutterReactiveBle.discoverServices(device.id);
+      log('Discovered services: $services');
+      return services;
+    } catch (e) {
+      log(e.toString());
+    }
+    return [];
+  }
+
+  /// read characteristic
+  /// Pass the [device] to read the characteristic from the device.
+
+  Future<List<int>> readCharacteristic(
+      QualifiedCharacteristic characteristic) async {
+    try {
+      var res = await _flutterReactiveBle.readCharacteristic(
+        characteristic,
+      );
+      log('Read characteristic: $res');
+      return res;
+    } catch (e) {
+      log(e.toString());
+    }
+    return [];
+  }
+
+
+  /// write characteristic
+  /// Pass the [device] to write the characteristic from the device.
+  /// 
+  /// Pass the [value] to write the characteristic from the device.
+  /// 
+    Future<void> writeCharacteristicwithResponse(QualifiedCharacteristic characteristic, List<int> value) async {
+    try {
+       await _flutterReactiveBle.writeCharacteristicWithResponse(
+        characteristic,
+        value: value,
+      );
+    } catch (e) {
+      log(e.toString());
+    }
+    }
+
+    Future<void> writeCharacteristicwithoutResponse(QualifiedCharacteristic characteristic, List<int> value) async {
+    try {
+       
+       await _flutterReactiveBle.writeCharacteristicWithoutResponse(
+        characteristic,
+        value: value,
+      );
+    } catch (e) {
+      log(e.toString());
+    }
+    }
 }

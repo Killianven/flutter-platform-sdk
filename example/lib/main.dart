@@ -3,11 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:golain/golain.dart';
+import 'package:golain_example/scanble.dart';
 import 'package:golain_example/scanbloc/scan_bloc.dart';
 import 'package:golain_example/scanning.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  GetIt getIt = GetIt.instance;
+  getIt.registerSingleton<Golain>(Golain());
   runApp(const MyApp());
 }
 
@@ -63,7 +68,7 @@ class _MyAppState extends State<MyApp> {
           appBar: AppBar(
             title: const Text('Plugin example app'),
           ),
-          body: const Scanning(),
+          body: const ScanBle(),
         ),
       ),
     );

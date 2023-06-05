@@ -9,8 +9,8 @@ import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
 @$core.Deprecated('Use shadowDescriptor instead')
-const shadow$json = const {
-  '1': 'shadow',
+const Shadow$json = const {
+  '1': 'Shadow',
   '2': const [
     const {'1': 'red', '3': 1, '4': 1, '5': 5, '10': 'red'},
     const {'1': 'green', '3': 2, '4': 1, '5': 5, '10': 'green'},
@@ -18,5 +18,5 @@ const shadow$json = const {
   ],
 };
 
-/// Descriptor for `shadow`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List shadowDescriptor = $convert.base64Decode('CgZzaGFkb3cSEAoDcmVkGAEgASgFUgNyZWQSFAoFZ3JlZW4YAiABKAVSBWdyZWVuEhIKBGJsdWUYAyABKAVSBGJsdWU=');
+/// Descriptor for `Shadow`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List shadowDescriptor = $convert.base64Decode('CgZTaGFkb3cSEAoDcmVkGAEgASgFUgNyZWQSFAoFZ3JlZW4YAiABKAVSBWdyZWVuEhIKBGJsdWUYAyABKAVSBGJsdWU=');
