@@ -2,10 +2,13 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:nordic_nrf_mesh/nordic_nrf_mesh.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'golain_doozMeshManager.dart';
 import 'golain_platform_interface.dart';
@@ -429,6 +432,7 @@ class Golain {
     try {
       _devices.clear();
       _subscription?.cancel();
+      await _requestPermissions();
       _subscription = _flutterReactiveBle
           .scanForDevices(withServices: serviceIds)
           .listen((device) async {
@@ -553,4 +557,19 @@ class Golain {
       log(e.toString());
     }
     }
+}
+Future<void> _requestPermissions() async {
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    final androidInfo = await DeviceInfoPlugin().androidInfo;
+    if (androidInfo.version.sdkInt < 31) {
+      await Permission.locationWhenInUse.request();
+      await Permission.locationAlways.request();
+      await Permission.bluetooth.request();
+    } else {
+      await Permission.bluetoothScan.request();
+      await Permission.bluetoothConnect.request();
+    }
+  } else {
+    await Permission.bluetooth.request();
+  }
 }

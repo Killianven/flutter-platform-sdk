@@ -79,7 +79,7 @@ class _CharacteristicPageState extends State<CharacteristicPage> {
 
           // ),
           // get shadow
-          widget.discoveredCharacteristic.isReadable?
+          widget.discoveredCharacteristic.isReadable ?
 
           ElevatedButton(
 
