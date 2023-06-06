@@ -9,16 +9,16 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-class shadow extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'shadow', createEmptyInstance: create)
+class Shadow extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Shadow', createEmptyInstance: create)
     ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'red', $pb.PbFieldType.O3)
     ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'green', $pb.PbFieldType.O3)
     ..a<$core.int>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'blue', $pb.PbFieldType.O3)
     ..hasRequiredFields = false
   ;
 
-  shadow._() : super();
-  factory shadow({
+  Shadow._() : super();
+  factory Shadow({
     $core.int? red,
     $core.int? green,
     $core.int? blue,
@@ -35,26 +35,26 @@ class shadow extends $pb.GeneratedMessage {
     }
     return _result;
   }
-  factory shadow.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory shadow.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory Shadow.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Shadow.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  shadow clone() => shadow()..mergeFromMessage(this);
+  Shadow clone() => Shadow()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  shadow copyWith(void Function(shadow) updates) => super.copyWith((message) => updates(message as shadow)) as shadow; // ignore: deprecated_member_use
+  Shadow copyWith(void Function(Shadow) updates) => super.copyWith((message) => updates(message as Shadow)) as Shadow; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static shadow create() => shadow._();
-  shadow createEmptyInstance() => create();
-  static $pb.PbList<shadow> createRepeated() => $pb.PbList<shadow>();
+  static Shadow create() => Shadow._();
+  Shadow createEmptyInstance() => create();
+  static $pb.PbList<Shadow> createRepeated() => $pb.PbList<Shadow>();
   @$core.pragma('dart2js:noInline')
-  static shadow getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<shadow>(create);
-  static shadow? _defaultInstance;
+  static Shadow getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Shadow>(create);
+  static Shadow? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get red => $_getIZ(0);

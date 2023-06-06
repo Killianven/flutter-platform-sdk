@@ -3,10 +3,10 @@ description: A new Flutter plugin project.
 version: 0.0.1
 homepage:
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: '>=2.19.2 <3.0.0'
+  sdk: ">=2.19.2 <3.0.0"
   flutter: ">=2.5.0"
 
 dependencies:
@@ -19,11 +19,18 @@ dependencies:
       url: https://github.com/golain-io/nrf_mesh_plugin
       ref: master
   logger: ^1.2.2
-
+  flutter_reactive_ble: ^5.0.3
+  dio: ^5.1.2
+  permission_handler: ^10.2.0
+  device_info_plus: ^8.1.0
+  fluttertoast: ^8.2.2
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  json_serializable: ^6.7.0
+  build_runner: ^2.4.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

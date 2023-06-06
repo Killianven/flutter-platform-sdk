@@ -52,7 +52,7 @@ class VendorModel extends StatelessWidget {
               );
             }
             if (state is VendorModelControlGetSuccess) {
-              final message = shadow.fromBuffer(state.data.message.toList());
+              final message = Shadow.fromBuffer(state.data.message.toList());
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('Vendor Model Message: $message'),

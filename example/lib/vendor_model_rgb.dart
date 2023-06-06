@@ -90,7 +90,7 @@ class _RGBProtobufState extends State<RGBProtobuf> {
               ),
               ElevatedButton(
                   onPressed: () async {
-                    final message = shadow()
+                    final message = Shadow()
                       ..red = currentColor.red
                       ..green = currentColor.green
                       ..blue = currentColor.blue;
