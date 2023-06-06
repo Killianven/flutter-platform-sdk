@@ -5,8 +5,10 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nordic_nrf_mesh/nordic_nrf_mesh.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -41,34 +43,34 @@ class Golain {
   late StreamSubscription<ConnectionStateUpdate> _connection;
 
   /// Initializes the streams required for the plugin and returns an instance of [Golain].
-  Golain() {
-    _meshManagerApi = _nordicNrfMesh.meshManagerApi;
-    _meshNetwork = _meshManagerApi.meshNetwork;
-    onNetworkUpdateSubscription =
-        _meshManagerApi.onNetworkUpdated.listen((network) {
-      _meshNetwork = network;
-    });
-    onNetworkImportSubscription =
-        _meshManagerApi.onNetworkImported.listen((network) {
-      _meshNetwork = network;
-    });
-    onNetworkLoadingSubscription =
-        _meshManagerApi.onNetworkLoaded.listen((network) {
-      _meshNetwork = network;
-    });
-    // loading mesh network in the initialization
-    loadMeshNetwork();
-  }
+  // Golain() {
+  //   _meshManagerApi = _nordicNrfMesh.meshManagerApi;
+  //   _meshNetwork = _meshManagerApi.meshNetwork;
+  //   onNetworkUpdateSubscription =
+  //       _meshManagerApi.onNetworkUpdated.listen((network) {
+  //     _meshNetwork = network;
+  //   });
+  //   onNetworkImportSubscription =
+  //       _meshManagerApi.onNetworkImported.listen((network) {
+  //     _meshNetwork = network;
+  //   });
+  //   onNetworkLoadingSubscription =
+  //       _meshManagerApi.onNetworkLoaded.listen((network) {
+  //     _meshNetwork = network;
+  //   });
+  //   // loading mesh network in the initialization
+  //   loadMeshNetwork();
+  // }
 
-  /// Disposes the streams used by the plugin.
-  void dispose() {
-    onNetworkUpdateSubscription.cancel();
-    onNetworkImportSubscription.cancel();
-    onNetworkLoadingSubscription.cancel();
-    _scanSubscription?.cancel();
-    _provisioningSubscription?.cancel();
-    _deinit();
-  }
+  // /// Disposes the streams used by the plugin.
+  // void dispose() {
+  //   onNetworkUpdateSubscription.cancel();
+  //   onNetworkImportSubscription.cancel();
+  //   onNetworkLoadingSubscription.cancel();
+  //   _scanSubscription?.cancel();
+  //   _provisioningSubscription?.cancel();
+  //   _deinit();
+  // }
 
   Future<void> loadMeshNetwork() async {
     await _meshManagerApi.loadMeshNetwork();
@@ -476,6 +478,14 @@ class Golain {
           .listen((connectionState) {
         log('Connection state: $connectionState');
         _deviceConnectionController.add(connectionState);
+        if (connectionState.connectionState ==
+            DeviceConnectionState.connected) {
+          Fluttertoast.showToast(
+            msg: 'Connected to ${device.name}',
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.green,
+          );
+        }
       });
     } catch (e) {
       log(e.toString());
@@ -497,6 +507,11 @@ class Golain {
           deviceId: device.id,
           connectionState: DeviceConnectionState.disconnected,
           failure: null));
+      Fluttertoast.showToast(
+        msg: 'Disconnected from ${device.name}',
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.green,
+      );
     }
   }
 
@@ -529,35 +544,36 @@ class Golain {
     return [];
   }
 
-
   /// write characteristic
   /// Pass the [device] to write the characteristic from the device.
-  /// 
+  ///
   /// Pass the [value] to write the characteristic from the device.
-  /// 
-    Future<void> writeCharacteristicwithResponse(QualifiedCharacteristic characteristic, List<int> value) async {
+  ///
+  Future<void> writeCharacteristicwithResponse(
+      QualifiedCharacteristic characteristic, List<int> value) async {
     try {
-       await _flutterReactiveBle.writeCharacteristicWithResponse(
+      await _flutterReactiveBle.writeCharacteristicWithResponse(
         characteristic,
         value: value,
       );
     } catch (e) {
       log(e.toString());
     }
-    }
+  }
 
-    Future<void> writeCharacteristicwithoutResponse(QualifiedCharacteristic characteristic, List<int> value) async {
+  Future<void> writeCharacteristicwithoutResponse(
+      QualifiedCharacteristic characteristic, List<int> value) async {
     try {
-       
-       await _flutterReactiveBle.writeCharacteristicWithoutResponse(
+      await _flutterReactiveBle.writeCharacteristicWithoutResponse(
         characteristic,
         value: value,
       );
     } catch (e) {
       log(e.toString());
     }
-    }
+  }
 }
+
 Future<void> _requestPermissions() async {
   if (defaultTargetPlatform == TargetPlatform.android) {
     final androidInfo = await DeviceInfoPlugin().androidInfo;

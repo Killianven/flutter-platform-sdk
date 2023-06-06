@@ -23,7 +23,8 @@ dependencies:
   dio: ^5.1.2
   permission_handler: ^10.2.0
   device_info_plus: ^8.1.0
-
+  fluttertoast: ^8.2.2
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
